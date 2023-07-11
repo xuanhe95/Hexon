@@ -1,0 +1,57 @@
+.button {
+
+
+    button {
+        background-color: #e1a01f;
+        color: white;
+        border: none;
+        outline: none;
+        padding: 10px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        margin: auto;
+        width: 80px;
+        display: block;
+        place-items: center;
+        border-radius: 10px;
+        user-select: none;
+        cursor: pointer;
+
+    }
+}
+
+.saveButton {
+    position: fixed;
+    bottom: 50px;
+    right: 100px;
+    border-radius: 10px;
+}
+
+.publishButton {
+    position: fixed;
+    bottom: 50px;
+    right: 200px;
+    border-radius: 10px;
+}
+
+.newButton {
+    position: fixed;
+    bottom: 50px;
+    right: 300px;
+    border-radius: 10px;
+}
+
+.deleteButton {
+    position: fixed;
+    bottom: 50px;
+    right: 400px;
+    border-radius: 10px;
+}
+
+.settingButton {
+    position: fixed;
+    bottom: 50px;
+    right: 500px;
+    border-radius: 10px;
+}
