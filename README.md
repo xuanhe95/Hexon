@@ -8,11 +8,11 @@ https://github.com/xuanhe95/Hexon/assets/82539791/76b16ec9-9d64-4226-ac91-755a7d
 
 👷目前仍在开发中。  
 
-已经实现的功能： 
+已经实现的功能：  
 ☑️加载Markdown博文  
 ☑️新建，删除博文  
 ☑️编辑及保存博文  
 仍在实现的功能： 
-🚧保存为Markdown文件并推送到Github  
+🚧保存为Markdown文件并推送到Github   
 🚧设置Github仓库及本地文件夹  
 🚧标签，分组等参数修改  
