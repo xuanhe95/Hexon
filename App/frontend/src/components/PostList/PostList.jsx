@@ -3,15 +3,25 @@ import "./PostList.scss";
 import { sendMsg } from "../../api";
 
 class PostList extends Component {
+    constructor(props) {
+        super(props);
+        this.update = this.update.bind(this);
+        this.curIndex = this.props.index;
+    }
+
+    update(index) {
+        this.props.update(index);
+    }
+
+
     render() {
         const messages = this.props.posts.map((msg, index) => (
-            < li key={index} onClick={() => { sendMsg("open_" + String(index)) }} >
+            <li key={index}
+                class={index === this.props.index ? "active" : ""}
+                onClick={() => this.update(index)}>
                 {this.props.posts[index]}</li >
         ));
         return (
-
-            // console.log(id),
-            // console.log(id[id.length - 1]),
             <div className="PostList">
                 <ol >
                     {messages}
@@ -19,6 +29,9 @@ class PostList extends Component {
             </div >
         );
     }
+
+
+    // () => { sendMsg("open_" + String(index))
 
     // toList(messages) {
     //     var content = "";

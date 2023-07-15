@@ -6,6 +6,7 @@ import (
 )
 
 type Post struct {
+	revised    bool
 	title      string
 	date       string
 	tags       []string
@@ -32,4 +33,16 @@ func (p *Post) setFileTitle() {
 	fileTitle := strings.Replace(p.title, " ", "-", -1)
 	fileTitle = strings.Replace(fileTitle, ".", "", -1)
 	p.title = fileTitle
+}
+
+type ByDate []Post
+
+func (p ByDate) Len() int {
+	return len(p)
+}
+func (p ByDate) Less(i, j int) bool {
+	return p[i].date < p[j].date
+}
+func (p ByDate) Swap(i, j int) {
+	p[i], p[j] = p[j], p[i]
 }

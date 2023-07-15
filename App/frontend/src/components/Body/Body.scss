@@ -8,12 +8,24 @@
     margin: 20px;
 }
 
+.ButtonBar {
+    height: 60px;
+    max-width: 1400px;
+    min-width: 600px;
+    width: 1400px;
+    border: 0px solid #ccc;
+    background-color: white;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
 .BodyContainer {
     height: 80vh;
     grid-template-columns: 1fr 4fr;
     display: grid;
     max-width: 1400px;
-    min-width: 820px;
+    min-width: 600px;
     justify-content: center;
 
 }
@@ -22,10 +34,10 @@
 .setting,
 .PostList {
     margin: 10px;
-    padding: 20px;
+
     border-radius: 15px;
     border: 0px solid #15223b;
-    background-color: #f0f0f0;
+    background-color: rgb(240, 240, 240);
     justify-content: center;
     overflow: scroll;
 
@@ -38,7 +50,11 @@
 .editor,
 .setting {
     float: center;
+    padding: 20px;
 
+    input {
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    }
 }
 
 .editor {
@@ -50,6 +66,7 @@
 }
 
 .PostList {
+    padding: 10px;
     float: right;
     min-width: 250px;
     max-width: 250px;
@@ -78,23 +95,32 @@
 
     li {
         cursor: pointer;
+        list-style-type: none;
         margin: 8px;
         padding: 10px;
         border-radius: 10px;
         list-style-position: inside;
         user-select: none;
-        background: rgb(222, 222, 222);
-        box-shadow: 0px 0px 0px gray;
+
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+
+
+
+        background: whitesmoke
     }
 
 
 
-    li:hover {
-        background-color: rgb(255, 255, 255);
+    li:hover:not(.active) {
+        //background-color: #fffbeb;
+        background-color: white;
         color: black;
     }
 
-
+    ol .active {
+        //background: #ffd00040;
+        background: #6b92db83;
+    }
 }
 
 /**
@@ -662,7 +688,7 @@ span.CodeMirror-selectedtext {
 }
 
 .editor-toolbar {
-    box-shadow: 0px 0px 4px gray;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
     text-align: center;
     background: whitesmoke;
     position: sticky;
@@ -754,7 +780,8 @@ span.CodeMirror-selectedtext {
 
 .editor-toolbar button.active,
 .editor-toolbar button:hover {
-    background: #fcfcfc;
+    //background: #fcfcfc;
+    background: white;
     border-color: #95a5a6
 }
 

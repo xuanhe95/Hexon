@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -55,38 +56,96 @@ func processCode(code string) []byte {
 		code = strings.TrimPrefix(code, "open_")
 		index, _ := strconv.Atoi(code)
 		return processOpen(index)
+	} else if strings.Contains(code, "delete_") {
+		code = strings.TrimPrefix(code, "delete_")
+		index, _ := strconv.Atoi(code)
+		return processDelete(index)
+	} else if strings.Contains(code, "save_content_to_") {
+		code = strings.TrimPrefix(code, "save_content_to_")
+		simicolonIndex := strings.Index(code, ":")
+		index, _ := strconv.Atoi(code[:simicolonIndex])
+		if index >= len(postfiles) || index < 0 {
+			return []byte("Error: Index out of range")
+		}
+
+		postfiles[index].revised = true
+		postfiles[index].content = code[simicolonIndex+1:]
+		fmt.Println(postfiles[index].content)
+		return []byte("Saved")
 	} else {
 		switch code {
 		case "Hello From The Client!":
 			return []byte("Hello From The Server!")
-		case "New":
+		case "new_post":
 			return processNew()
-		case "save":
-			processSave()
-			return []byte("Saved")
-		case "openPosts":
+		case "initilize_all_posts":
+			fmt.Println(len(postfiles))
 			return processOpenPosts()
 		default:
 			return []byte("Error")
 		}
 	}
+}
+
+func processDelete(index int) []byte {
+	fmt.Println("Delete")
+	if index >= len(postfiles) {
+		return []byte("Error: Index out of range")
+	}
+	if len(postfiles) == 1 {
+		postfiles = postfiles[:0]
+	} else {
+		postfiles = append(postfiles[:index], postfiles[index+1:]...)
+	}
+
+	return processOpenPosts()
 
 }
 func processNew() []byte {
 	fmt.Println("New")
-	return []byte("New")
+	addNewPost(time.Now().Format("2006-01-02 15:04:05"))
+	return processOpenPosts()
+}
+
+func addNewPost(date string) {
+	newPost := NewPost(true, "New Post", date, "")
+	// newPost.revised = true
+	// newPost.title = "title: New Post"
+	// newPost.date = date
+	// newPost.content = ""
+	postfiles = append([]Post{*newPost}, postfiles...) //这里还可以做的更好，但是需要调整前端保存文件地址的方式
+
+}
+
+func NewPost(revised bool, title string, date string, content string) *Post {
+	return &Post{
+		revised: revised,
+		title:   title,
+		date:    date,
+		content: content,
+	}
 }
 func processOpen(index int) []byte {
 	fmt.Println("Open")
-	return []byte("post_content: " + postfiles[index].content)
+	fmt.Println(len(postfiles))
+	fmt.Println(index)
+	if index >= len(postfiles) || index < 0 {
+		return []byte("Error: Index out of range")
+	}
+	return []byte("post_content_" + postfiles[index].content)
 }
 func processOpenPosts() []byte {
 	fmt.Println("Open Posts")
 	messages := ""
 	for _, post := range postfiles {
+		messages += "post_title_"
 		messages += post.title
 		messages += "\n"
 	}
+	// for i := len(postfiles) - 1; i >= 0; i-- {
+	// 	messages += postfiles[i].title
+	// 	messages += "\n"
+	// }
 	messages = strings.TrimRight(messages, "\n")
 	return []byte(messages)
 }

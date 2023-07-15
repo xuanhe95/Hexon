@@ -3,8 +3,6 @@ import SimpleMDE, { SimpleMdeReact } from "react-simplemde-editor";
 import EasyMDE from "easymde";
 
 const MDEditor = (props) => {
-    console.log(props.content)
-    console.log("TEST")
     //var md = customMarkdownParser(props.content);
     const spellCheckerOptions = useMemo(() => {
         return {
@@ -13,11 +11,18 @@ const MDEditor = (props) => {
 
         }
     })
+
+    const getContent = (value) => {
+        props.onGetContent(value);
+    }
+
     return (
         <div className="editor">
             <SimpleMdeReact
+                key={props.key}
                 value={props.content}
                 options={spellCheckerOptions}
+                onChange={getContent}
             />
         </div>
     );

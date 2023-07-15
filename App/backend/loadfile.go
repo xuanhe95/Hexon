@@ -4,8 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 )
+
+var postfiles []Post
 
 func ParseHexoDirectory(dir string) {
 	if dir[len(dir)-1] == '/' {
@@ -29,7 +32,9 @@ func LoadPost(filename string) Post { // load one post
 
 	var meta bool
 	var metaCount int
-	var p Post
+	//p := NewPost(false, "", "", "")
+	p := Post{}
+	p.revised = false
 	for scanner.Scan() {
 		var line string = scanner.Text()
 		//fmt.Println(line)
@@ -40,24 +45,24 @@ func LoadPost(filename string) Post { // load one post
 		}
 		if meta {
 			if strings.HasPrefix(line, "title:") {
-				strings.Replace(line, "title:", "", 1)
-				strings.TrimSpace(line)
+				line = strings.Replace(line, "title:", "", 1)
+				line = strings.TrimSpace(line)
 				p.title = line
 			} else if strings.HasPrefix(line, "date:") {
-				strings.Replace(line, "date:", "", 1)
-				strings.TrimSpace(line)
+				line = strings.Replace(line, "date:", "", 1)
+				line = strings.TrimSpace(line)
 				p.date = line
 			} else if strings.HasPrefix(line, "tags:") {
-				strings.Replace(line, "tags:", "", 1)
-				strings.TrimSpace(line)
+				line = strings.Replace(line, "tags:", "", 1)
+				line = strings.TrimSpace(line)
 				tags := strings.Split(line, ",")
 				for _, tag := range tags {
 					tag = strings.TrimSpace(tag)
 					p.tags = append(p.tags, tag)
 				}
 			} else if strings.HasPrefix(line, "categories:") {
-				strings.Replace(line, "categories:", "", 1)
-				strings.TrimSpace(line)
+				line = strings.Replace(line, "categories:", "", 1)
+				line = strings.TrimSpace(line)
 				categories := strings.Split(line, ",")
 				for _, category := range categories {
 					category = strings.TrimSpace(category)
@@ -70,14 +75,14 @@ func LoadPost(filename string) Post { // load one post
 					p.toc = false
 				}
 			} else if strings.HasPrefix(line, "cover:") {
-				strings.Replace(line, "cover:", "", 1)
-				strings.Replace(line, ">-", "", 1)
-				strings.TrimSpace(line)
+				line = strings.Replace(line, "cover:", "", 1)
+				line = strings.Replace(line, ">-", "", 1)
+				line = strings.TrimSpace(line)
 				p.cover = line
 			} else if strings.HasPrefix(line, "thumbnail:") {
-				strings.Replace(line, "thumbnail:", "", 1)
-				strings.Replace(line, ">-", "", 1)
-				strings.TrimSpace(line)
+				line = strings.Replace(line, "thumbnail:", "", 1)
+				line = strings.Replace(line, ">-", "", 1)
+				line = strings.TrimSpace(line)
 				p.thumbnail = line
 			}
 
@@ -93,8 +98,6 @@ func LoadPost(filename string) Post { // load one post
 	}
 	return p
 }
-
-var postfiles []Post
 
 func LoadPosts(dir string) ([]string, error) {
 	var posts []string
@@ -113,5 +116,6 @@ func LoadPosts(dir string) ([]string, error) {
 			fmt.Println("Open Success!")
 		}
 	}
+	sort.Sort(sort.Reverse(ByDate(postfiles)))
 	return posts, nil
 }
